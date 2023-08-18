@@ -20,12 +20,12 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        Session currentSession = null;
+        Session session = null;
         Transaction transaction = null;
         try {
-            currentSession = sessionFactory.openSession();
-            transaction = currentSession.beginTransaction();
-            currentSession.persist(book);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.persist(book);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -33,8 +33,8 @@ public class BookRepositoryImpl implements BookRepository {
             }
             throw new HibernateException("Can't add book: " + book, e);
         } finally {
-            if (currentSession != null) {
-                currentSession.close();
+            if (session != null) {
+                session.close();
             }
         }
         return book;
@@ -42,9 +42,8 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        try (Session currentSession = sessionFactory.openSession();) {
-            Query<Book> getAllCinemaHallsQuery =
-                    currentSession.createQuery("FROM Book", Book.class);
+        try (Session session = sessionFactory.openSession();) {
+            Query<Book> getAllCinemaHallsQuery = session.createQuery("FROM Book", Book.class);
             return getAllCinemaHallsQuery.getResultList();
         } catch (Exception e) {
             throw new HibernateException("Can't find all books", e);
