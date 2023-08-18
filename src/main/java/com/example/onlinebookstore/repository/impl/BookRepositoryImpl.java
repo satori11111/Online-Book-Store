@@ -3,6 +3,7 @@ package com.example.onlinebookstore.repository.impl;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.BookRepository;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -30,7 +31,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't add book: " + book, e);
+            throw new HibernateException("Can't add book: " + book, e);
         } finally {
             if (currentSession != null) {
                 currentSession.close();
@@ -46,7 +47,7 @@ public class BookRepositoryImpl implements BookRepository {
                     currentSession.createQuery("FROM Book", Book.class);
             return getAllCinemaHallsQuery.getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't find all books", e);
+            throw new HibernateException("Can't find all books", e);
         }
     }
 }

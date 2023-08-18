@@ -9,9 +9,9 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.Data;
 
-@Entity
 @Data
-@Table(name = "books")
+@Entity
+@Table(name = "book")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

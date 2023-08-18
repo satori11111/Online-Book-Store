@@ -20,17 +20,14 @@ public class OnlineBookStoreApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner() {
-        return new CommandLineRunner() {
-            @Override
-            public void run(String... args) throws Exception {
-                Book book = new Book();
-                book.setAuthor("rowling");
-                book.setIsbn("123455");
-                book.setTitle("Harry Potter");
-                book.setPrice(BigDecimal.ONE);
-                bookService.save(book);
-                System.out.println(bookService.findAll());
-            }
+        return args -> {
+            Book book = new Book();
+            book.setAuthor("rowling");
+            book.setIsbn("123455");
+            book.setTitle("Harry Potter");
+            book.setPrice(BigDecimal.ONE);
+            bookService.save(book);
+            System.out.println(bookService.findAll());
         };
     }
 }
