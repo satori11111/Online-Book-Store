@@ -1,7 +1,7 @@
 package com.example.onlinebookstore.service.impl;
 
 import com.example.onlinebookstore.dto.BookDto;
-import com.example.onlinebookstore.dto.BookSearchParameters;
+import com.example.onlinebookstore.dto.BookSearchParametersDto;
 import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
@@ -54,7 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParameters parameters) {
+    public List<BookDto> search(BookSearchParametersDto parameters) {
         Specification<Book> specification = specificationBuilder.build(parameters);
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
