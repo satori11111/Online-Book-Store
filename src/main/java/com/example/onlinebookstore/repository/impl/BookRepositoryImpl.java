@@ -43,8 +43,8 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAll() {
         try (Session session = sessionFactory.openSession();) {
-            Query<Book> getAllCinemaHallsQuery = session.createQuery("FROM Book", Book.class);
-            return getAllCinemaHallsQuery.getResultList();
+            Query<Book> findAllBookQuery = session.createQuery("FROM Book", Book.class);
+            return findAllBookQuery.getResultList();
         } catch (Exception e) {
             throw new HibernateException("Can't find all books", e);
         }
