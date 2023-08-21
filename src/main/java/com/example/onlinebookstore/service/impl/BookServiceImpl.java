@@ -33,7 +33,6 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
-
     }
 
     @Override
