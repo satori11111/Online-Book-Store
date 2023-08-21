@@ -32,12 +32,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
-
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.getById(id);
+        Book book = bookRepository.getBookById(id);
         return bookMapper.toDto(book);
     }
 
