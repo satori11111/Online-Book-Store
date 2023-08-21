@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-is_deleted-column
+      author: roma
+      changes:
+        - addColumn:
+            tableName: book
+            columns:
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: false
