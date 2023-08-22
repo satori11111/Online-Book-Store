@@ -1,6 +1,6 @@
 package com.example.onlinebookstore.repository.book;
 
-import com.example.onlinebookstore.dto.BookSearchParameters;
+import com.example.onlinebookstore.dto.BookSearchParametersDto;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.SpecificationBuilder;
 import com.example.onlinebookstore.repository.SpecificationProviderManager;
@@ -16,15 +16,15 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     private final SpecificationProviderManager<Book> providerManager;
 
     @Override
-    public Specification<Book> build(BookSearchParameters bookSearchParameters) {
+    public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
         Specification<Book> specification = Specification.where(null);
-        String[] authors = bookSearchParameters.authors();
+        String[] authors = bookSearchParametersDto.authors();
         if (authors != null && authors.length > 0) {
             specification = specification.and(providerManager
                     .getSpecificationProvider(AUTHOR_KEY)
                     .getSpecification(authors));
         }
-        String[] titles = bookSearchParameters.titles();
+        String[] titles = bookSearchParametersDto.titles();
         if (titles != null && titles.length > 0) {
             specification = specification.and(providerManager
                     .getSpecificationProvider(TITLE_KEY)
