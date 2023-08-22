@@ -8,9 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
+
+    private static final String AUTHOR_KEY = "author";
+
     @Override
     public String getKey() {
-        return "author";
+        return AUTHOR_KEY;
     }
 
     public Specification<Book> getSpecification(String[] params) {
