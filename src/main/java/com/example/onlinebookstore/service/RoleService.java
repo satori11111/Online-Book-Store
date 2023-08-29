@@ -5,5 +5,4 @@ import com.example.onlinebookstore.model.Role;
 
 public interface RoleService {
     Role getRoleByRoleName(RoleName roleName);
-
 }
