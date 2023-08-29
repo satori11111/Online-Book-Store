@@ -17,7 +17,11 @@ public class UserRegistrationRequestDto {
     @Email
     private String email;
     @Length(min = 4,max = 255)
+    @NotNull
     private String password;
+    @Length(min = 4,max = 255)
+    @NotNull
+    private String repeatPassword;
     @Length(min = 1,max = 255)
     private String shippingAddress;
 }
