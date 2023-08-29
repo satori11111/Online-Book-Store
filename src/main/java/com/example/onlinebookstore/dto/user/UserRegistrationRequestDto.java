@@ -1,11 +1,15 @@
 package com.example.onlinebookstore.dto.user;
 
+import com.example.onlinebookstore.validation.FieldMatch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@FieldMatch.List({@FieldMatch(field = "password",
+        fieldMatch = "repeatPassword",
+        message = "Passwords do not match!")})
 public class UserRegistrationRequestDto {
     @NotNull
     @Length(min = 1,max = 255)

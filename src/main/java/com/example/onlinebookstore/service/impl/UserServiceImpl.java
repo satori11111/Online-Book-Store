@@ -26,9 +26,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (!request.getPassword().equals(request.getRepeatPassword())) {
-            throw new RegistrationException("Passwords are different");
-        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RegistrationException("User already registered");
         }
