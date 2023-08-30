@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-admin-user
+      author: roma
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: Roman
+              - column:
+                  name: last_name
+                  value: Kuchmii
+              - column:
+                  name: password
+                  value: $2a$12$A6FpJyBJQlWfM3DMHTtrk.ryVemhHkFf5.oJ5q8/mAlqwhL.4TMbi
+              - column:
+                  name: email
+                  value: romakuch@gmail.com
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 2
