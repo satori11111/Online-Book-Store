@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  online-book-store:
-    build: .
-    container_name: online-book-store
-    env_file: ./.env
-    environment:
-      - spring.datasource.url=$MYSQL_DATASOURCE_URL
-      - spring.datasource.username=$MYSQL_DATASOURCE_USERNAME
-      - spring.datasource.password=$MYSQL_DATASOURCE_PASSWORD
-    ports:
-      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
-    depends_on:
-      - db
-
   db:
     image: mysql:latest
     container_name: db
@@ -27,3 +14,17 @@ services:
       - $MYSQL_PORT:$DOCKER_MYSQL_PORT
     expose:
       - $MYSQL_PORT
+
+  online-book-store:
+    build: .
+    container_name: online-book-store
+    env_file: ./.env
+    environment:
+      - spring.datasource.url=$MYSQL_DATASOURCE_URL
+      - spring.datasource.username=$MYSQL_DATASOURCE_USERNAME
+      - spring.datasource.password=$MYSQL_DATASOURCE_PASSWORD
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    depends_on:
+      - db
+
