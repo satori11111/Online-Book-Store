@@ -1,7 +1,7 @@
 package com.example.onlinebookstore.repository.book.specification;
 
 import com.example.onlinebookstore.model.Book;
-import com.example.onlinebookstore.repository.SpecificationProvider;
+import com.example.onlinebookstore.repository.specification.SpecificationProvider;
 import java.util.Arrays;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

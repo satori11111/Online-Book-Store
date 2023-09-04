@@ -1,8 +1,8 @@
 package com.example.onlinebookstore.repository.book;
 
 import com.example.onlinebookstore.model.Book;
-import com.example.onlinebookstore.repository.SpecificationProvider;
-import com.example.onlinebookstore.repository.SpecificationProviderManager;
+import com.example.onlinebookstore.repository.specification.SpecificationProvider;
+import com.example.onlinebookstore.repository.specification.SpecificationProviderManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;

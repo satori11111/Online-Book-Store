@@ -5,7 +5,7 @@ import com.example.onlinebookstore.dto.book.BookSearchParametersDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
-import com.example.onlinebookstore.repository.SpecificationBuilder;
+import com.example.onlinebookstore.repository.specification.SpecificationBuilder;
 import com.example.onlinebookstore.repository.book.BookRepository;
 import com.example.onlinebookstore.service.BookService;
 import java.util.List;
