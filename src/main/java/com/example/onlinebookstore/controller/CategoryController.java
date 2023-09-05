@@ -5,6 +5,7 @@ import com.example.onlinebookstore.dto.category.CategoryDto;
 import com.example.onlinebookstore.dto.category.CreateCategoryRequestDto;
 import com.example.onlinebookstore.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Get a category by its id",description = "Get a category by its id")
     public CategoryDto getCategoryById(@PathVariable Long id) {
@@ -47,6 +47,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "category created")
     @Operation(summary = "Create a category",description = "Create a category")
     public CategoryDto create(@RequestBody @Valid CreateCategoryRequestDto requestDto) {
         return categoryService.create(requestDto);

@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -35,10 +37,9 @@ public class Book {
     private String description;
     @Column(name = "cover_image")
     private String coverImage;
-    @ManyToMany
-    @JoinTable(name = "book_category",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @ManyToMany(mappedBy = "books")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Category> categories;
     @Column(name = "is_deleted",nullable = false)
     private boolean isDeleted = false;
