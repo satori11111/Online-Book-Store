@@ -1,9 +1,11 @@
 package com.example.onlinebookstore.repository;
 
 import com.example.onlinebookstore.model.OrderItem;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
-    List<OrderItem> getOrderItemsByOrderId(Long id);
+    Set<OrderItem> getOrderItemsByOrderId(Long id);
+
+    OrderItem getOrderItemByOrderIdAndId(Long orderId, Long orderItemId);
 }

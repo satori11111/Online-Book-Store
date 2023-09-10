@@ -4,7 +4,7 @@ databaseChangeLog:
       author: roma
       changes:
         - createTable:
-            tableName: order
+            tableName: orders
             columns:
               - column:
                   name: id

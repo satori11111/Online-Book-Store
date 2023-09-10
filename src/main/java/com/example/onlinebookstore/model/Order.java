@@ -9,22 +9,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Data
 @Entity
-@SQLDelete(sql = "UPDATE order SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +38,13 @@ public class Order {
     private Status status;
     @Column(nullable = false)
     private BigDecimal total;
-    @Column(name ="shipping_address",nullable = false)
+    @Column(name = "shipping_address",nullable = false)
     private String shippingAddress;
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
     @OneToMany(mappedBy = "order")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;
     @Column(nullable = false)
     private boolean isDeleted;
