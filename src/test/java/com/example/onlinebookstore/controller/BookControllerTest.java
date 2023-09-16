@@ -51,6 +51,7 @@ public class BookControllerTest {
     private static CreateBookRequestDto createBookRequest;
     private static BookDto expectedBookDto;
     private static BookDto expectedCreatedBookDto;
+    private static BookDto expectedBookDto2;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -81,7 +82,7 @@ public class BookControllerTest {
         expectedBookDto.setCoverImage("image1.jpg");
         expectedBookDto.setCategoriesIds(Set.of(1L));
 
-        BookDto expectedBookDto2 = new BookDto();
+        expectedBookDto2 = new BookDto();
         expectedBookDto2.setId(2L);
         expectedBookDto2.setTitle("Book 2");
         expectedBookDto2.setAuthor("Author 2");
@@ -116,7 +117,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("findAll_returnsList_ok")
     @Test
-    @Order(6)
+    @Order(0)
     void findAll_returnsList_ok() {
         MvcResult result = mockMvc.perform(get("/api/books?page=0&size=2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -132,7 +133,7 @@ public class BookControllerTest {
         boolean isEquals = EqualsBuilder.reflectionEquals(
                 expectedBookDto, actualDtos.get(0), "id");
         boolean isEqualsSecond = EqualsBuilder.reflectionEquals(
-                expectedCreatedBookDto, actualDtos.get(1), "id");
+                expectedBookDto2, actualDtos.get(1), "id");
         assertTrue(isEquals);
         assertTrue(isEqualsSecond);
     }
@@ -160,7 +161,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getById_returnsBook_ok")
     @Test
-    @Order(9)
+    @Order(0)
     void getById_returnsBook_ok() {
         MvcResult result = mockMvc.perform(get("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -169,7 +170,7 @@ public class BookControllerTest {
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         System.out.println(actual);
-        boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
+        boolean isEquals = EqualsBuilder.reflectionEquals(expectedBookDto, actual, "id");
         assertTrue(isEquals);
     }
 
