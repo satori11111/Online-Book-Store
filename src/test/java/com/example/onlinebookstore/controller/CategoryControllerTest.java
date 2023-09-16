@@ -27,6 +27,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -100,6 +101,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("findAllCategories_returnsList_ok")
     @Test
+    @Order(7)
     void findAllCategories_returnsList_ok() {
         MvcResult result = mockMvc.perform(get("/api/categories?page=0&size=2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -124,6 +126,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("createCategory_returnsCreatedCategory_ok")
     @Test
+    @Order(2)
     void createCategory_returnsCreatedCategory_ok() {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         MvcResult result = mockMvc.perform(post("/api/categories")
@@ -142,6 +145,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getCategoryById_returnsCategory_ok")
     @Test
+    @Order(9)
     void getCategoryById_returnsCategory_ok() {
         MvcResult result = mockMvc.perform(get("/api/categories/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -157,6 +161,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("updateCategory_returnsUpdatedCategory_ok")
     @Test
+    @Order(6)
     void updateCategory_returnsUpdatedCategory_ok() {
         CreateCategoryRequestDto updatedRequestDto = requestDto;
         updatedRequestDto.setName("updated Name");
@@ -178,6 +183,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("deleteCategoryById_deletesCategory_ok")
     @Test
+    @Order(1)
     void deleteCategoryById_deleteCategory_ok() {
         MvcResult result = mockMvc.perform(delete("/api/categories/2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -191,6 +197,7 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
+    @Order(8)
     void deleteById_NonValidId_ThrowsException() {
         mockMvc.perform(delete("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -202,6 +209,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("updateCategory_NonValidId_throwsException_notOk")
     @Test
+    @Order(5)
     void updateCategory_NonValidId_throwsException_notOk() {
         mockMvc.perform(put("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -213,6 +221,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getCategoryById_NonValidId_throwsException_notOk")
     @Test
+    @Order(3)
     void getCategoryById_NonValidId_throwsException_notOk() {
         mockMvc.perform(get("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -224,6 +233,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getBooksByCategoryId_returnsMatchingBooks_ok")
     @Test
+    @Order(4)
     void getBooksByCategoryId_returnsMatchingBooks_ok() {
         MvcResult result = mockMvc.perform(get("/api/categories/1/books")
                         .contentType(MediaType.APPLICATION_JSON))

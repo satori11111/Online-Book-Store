@@ -28,6 +28,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -112,6 +113,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("findAll_returnsList_ok")
     @Test
+    @Order(6)
     void findAll_returnsList_ok() {
         MvcResult result = mockMvc.perform(get("/api/books?page=0&size=2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -136,6 +138,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("createBook_returnsCreatedBook_ok")
     @Test
+    @Order(5)
     void createBook_returnsCreatedBook_ok() {
         String jsonRequest = objectMapper.writeValueAsString(createBookRequest);
         MvcResult result = mockMvc.perform(post("/api/books")
@@ -154,6 +157,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getById_returnsBook_ok")
     @Test
+    @Order(9)
     void getById_returnsBook_ok() {
         MvcResult result = mockMvc.perform(get("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -170,6 +174,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("updateBook_returnsUpdatedBook_ok")
     @Test
+    @Order(8)
     void updateBook_returnsUpdatedBook_ok() {
         CreateBookRequestDto updatedRequestDto = createBookRequest;
         updatedRequestDto.setIsbn("978-1-60309-527-3");
@@ -193,6 +198,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("deleteById_deletesBook_ok")
     @Test
+    @Order(1)
     void deleteById_deleteBook_ok() {
         MvcResult result = mockMvc.perform(delete("/api/books/2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -207,6 +213,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("deleteById_NonValidId_throwsException_notOk")
     @Test
+    @Order(3)
     void deleteById_NonValidId_throwsException_notOk() {
         mockMvc.perform(delete("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -218,6 +225,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("update_NonValidId_throwsException_notOk")
     @Test
+    @Order(4)
     void update_NonValidId_throwsException_notOk() {
         mockMvc.perform(put("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -229,6 +237,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("getById_NonValidId_throwsException_notOk")
     @Test
+    @Order(2)
     void getById_NonValidId_throwsException_notOk() {
         mockMvc.perform(get("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -240,6 +249,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin")
     @DisplayName("search_returnsMatchingBooks_ok")
     @Test
+    @Order(7)
     void search_returnsMatchingBooks_ok() {
         MvcResult result = mockMvc.perform(get("/api/books/search?authors=Jane Austen")
                         .contentType(MediaType.APPLICATION_JSON))
