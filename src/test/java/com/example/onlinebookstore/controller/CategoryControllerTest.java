@@ -27,7 +27,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,9 +45,8 @@ public class CategoryControllerTest {
     protected static MockMvc mockMvc;
     private static CategoryDto categoryDto;
     private static CreateCategoryRequestDto requestDto;
-    private static List<CategoryDto> categoryDtoResponseList;
     private static BookDto bookDto;
-    private static CategoryDto categoryDtoResponse;
+    private static CategoryDto expectedCategoryDto;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -63,7 +61,6 @@ public class CategoryControllerTest {
                 .build();
         teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
                     new ClassPathResource("db/book-category-insert.sql")
@@ -82,12 +79,10 @@ public class CategoryControllerTest {
         categoryDtoResponseSecond.setName("Category 1");
         categoryDtoResponseSecond.setDescription("Description for Category 1");
 
-        categoryDtoResponse = new CategoryDto();
-        categoryDtoResponse.setId(2L);
-        categoryDtoResponse.setName("Category 2");
-        categoryDtoResponse.setDescription("Description for Category 2");
-        categoryDtoResponseList =
-                List.of(categoryDtoResponse, categoryDtoResponseSecond);
+        expectedCategoryDto = new CategoryDto();
+        expectedCategoryDto.setId(2L);
+        expectedCategoryDto.setName("Category 2");
+        expectedCategoryDto.setDescription("Description for Category 2");
 
         bookDto = new BookDto();
         bookDto.setId(1L);
@@ -253,7 +248,6 @@ public class CategoryControllerTest {
     @SneakyThrows
     static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
                     new ClassPathResource("db/book-category-delete.sql")

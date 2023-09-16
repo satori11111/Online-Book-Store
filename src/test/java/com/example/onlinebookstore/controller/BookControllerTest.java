@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.onlinebookstore.dto.book.BookDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
-import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.book.BookRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,9 +46,7 @@ public class BookControllerTest {
     protected static MockMvc mockMvc;
     private static CreateBookRequestDto createBookRequest;
     private static BookDto expectedBookDto;
-    private static BookDto expectedBookDto2;
-    private static BookDto bookResponse;
-    private String oldIsbn = "";
+    private static BookDto expectedCreatedBookDto;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -64,8 +61,6 @@ public class BookControllerTest {
                 .build();
         teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
-            System.out.println(connection.getAutoCommit());
-            connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
                     new ClassPathResource("db/book-category-insert.sql")
@@ -82,7 +77,7 @@ public class BookControllerTest {
         expectedBookDto.setCoverImage("image1.jpg");
         expectedBookDto.setCategoriesIds(Set.of(1L));
 
-        expectedBookDto2 = new BookDto();
+        BookDto expectedBookDto2 = new BookDto();
         expectedBookDto2.setId(2L);
         expectedBookDto2.setTitle("Book 2");
         expectedBookDto2.setAuthor("Author 2");
@@ -91,9 +86,6 @@ public class BookControllerTest {
         expectedBookDto2.setDescription("Description for Book 2");
         expectedBookDto2.setCoverImage("image2.jpg");
         expectedBookDto2.setCategoriesIds(Set.of(2L));
-
-        Set<Category> categories = new HashSet<>();
-        categories.add(new Category());
 
         createBookRequest = new CreateBookRequestDto();
         createBookRequest.setTitle("Pride and Prejudice");
@@ -106,14 +98,14 @@ public class BookControllerTest {
         categoryIdsForDto.add(2L);
         createBookRequest.setCategoryIds(categoryIdsForDto);
 
-        bookResponse = new BookDto();
-        bookResponse.setTitle(createBookRequest.getTitle());
-        bookResponse.setAuthor(createBookRequest.getAuthor());
-        bookResponse.setIsbn(createBookRequest.getIsbn());
-        bookResponse.setCoverImage(createBookRequest.getCoverImage());
-        bookResponse.setDescription(createBookRequest.getDescription());
-        bookResponse.setCategoriesIds(categoryIdsForDto);
-        bookResponse.setPrice(createBookRequest.getPrice());
+        expectedCreatedBookDto = new BookDto();
+        expectedCreatedBookDto.setTitle(createBookRequest.getTitle());
+        expectedCreatedBookDto.setAuthor(createBookRequest.getAuthor());
+        expectedCreatedBookDto.setIsbn(createBookRequest.getIsbn());
+        expectedCreatedBookDto.setCoverImage(createBookRequest.getCoverImage());
+        expectedCreatedBookDto.setDescription(createBookRequest.getDescription());
+        expectedCreatedBookDto.setCategoriesIds(categoryIdsForDto);
+        expectedCreatedBookDto.setPrice(createBookRequest.getPrice());
     }
 
     @SneakyThrows
@@ -127,17 +119,18 @@ public class BookControllerTest {
         List<BookDto> actual =
                 objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
         List<BookDto> actualDtos = objectMapper.convertValue(actual,
-                new TypeReference<List<BookDto>>() {});
+                new TypeReference<List<BookDto>>() {
+                });
         int expectedSize = 2;
         assertEquals(expectedSize, actual.size());
 
-            boolean isEquals = EqualsBuilder.reflectionEquals(
-                    expectedBookDto, actualDtos.get(0), "id");
-            boolean isEqualsSecond = EqualsBuilder.reflectionEquals(
-                    bookResponse, actualDtos.get(1), "id");
-            assertTrue(isEquals);
-            assertTrue(isEqualsSecond);
-        }
+        boolean isEquals = EqualsBuilder.reflectionEquals(
+                expectedBookDto, actualDtos.get(0), "id");
+        boolean isEqualsSecond = EqualsBuilder.reflectionEquals(
+                expectedCreatedBookDto, actualDtos.get(1), "id");
+        assertTrue(isEquals);
+        assertTrue(isEqualsSecond);
+    }
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -153,7 +146,7 @@ public class BookControllerTest {
                 .andReturn();
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
-        boolean isEquals = EqualsBuilder.reflectionEquals(bookResponse, actual, "id");
+        boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
         assertTrue(isEquals);
     }
 
@@ -169,7 +162,7 @@ public class BookControllerTest {
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         System.out.println(actual);
-        boolean isEquals = EqualsBuilder.reflectionEquals(bookResponse, actual, "id");
+        boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
         assertTrue(isEquals);
     }
 
@@ -187,13 +180,12 @@ public class BookControllerTest {
                         .content(objectMapper.writeValueAsString(updatedRequestDto)))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        oldIsbn = bookResponse.getIsbn();
-        bookResponse.setIsbn(createBookRequest.getIsbn());
+        expectedCreatedBookDto.setIsbn(createBookRequest.getIsbn());
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                    BookDto.class);
-        System.out.println(bookResponse);
+                BookDto.class);
+        System.out.println(expectedCreatedBookDto);
         System.out.println(actual);
-        boolean isEquals = EqualsBuilder.reflectionEquals(bookResponse, actual, "id");
+        boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
         assertTrue(isEquals);
     }
 
@@ -255,10 +247,11 @@ public class BookControllerTest {
         List<BookDto> actual =
                 objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
         List<BookDto> actualDtos = objectMapper.convertValue(actual,
-                new TypeReference<List<BookDto>>() {});
+                new TypeReference<List<BookDto>>() {
+                });
         int expectedSize = 1;
         assertEquals(expectedSize, actual.size());
-        EqualsBuilder.reflectionEquals(bookResponse, actual.get(0), "id");
+        EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual.get(0), "id");
     }
 
     @AfterAll
@@ -271,7 +264,6 @@ public class BookControllerTest {
     @SneakyThrows
     static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
                     new ClassPathResource("db/book-category-delete.sql")
