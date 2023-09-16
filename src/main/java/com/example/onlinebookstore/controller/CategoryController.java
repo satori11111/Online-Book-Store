@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Get a category by its id",description = "Get a category by its id")
     public CategoryDto getCategoryById(@PathVariable Long id) {

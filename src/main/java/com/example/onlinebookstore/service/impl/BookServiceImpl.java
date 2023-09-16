@@ -3,8 +3,10 @@ package com.example.onlinebookstore.service.impl;
 import com.example.onlinebookstore.dto.book.BookDto;
 import com.example.onlinebookstore.dto.book.BookSearchParametersDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
+import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.repository.CategoryRepository;
 import com.example.onlinebookstore.repository.book.BookRepository;
 import com.example.onlinebookstore.repository.specification.SpecificationBuilder;
 import com.example.onlinebookstore.service.BookService;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final CategoryRepository categoryRepository;
     private final SpecificationBuilder<Book> specificationBuilder;
 
     @Override
@@ -32,19 +35,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable).stream()
+        return bookRepository.findAllBooksAndTheirCategories(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.getBookById(id);
+        Book book = bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id));
         return bookMapper.toDto(book);
     }
 
     @Override
     public BookDto update(CreateBookRequestDto requestDto, Long id) {
+        bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id));
         Book book = bookMapper.toModel(requestDto);
         book.setId(id);
         Book savedBook = bookRepository.save(book);
@@ -53,6 +59,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
+        bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id));
         bookRepository.deleteById(id);
     }
 

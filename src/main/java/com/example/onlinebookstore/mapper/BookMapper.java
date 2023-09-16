@@ -8,8 +8,10 @@ import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.Category;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
@@ -30,9 +32,10 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
     }
 
-    default Set<Long> map(Set<Category> value) {
-        return value.stream()
+    @AfterMapping
+    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
+        bookDto.setCategoriesIds(book.getCategories().stream()
                 .map(Category::getId)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()));
     }
 }
