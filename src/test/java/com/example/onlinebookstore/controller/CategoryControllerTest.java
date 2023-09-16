@@ -247,7 +247,6 @@ public class CategoryControllerTest {
                 new TypeReference<List<BookDto>>() {});
         int expectedSize = 1;
         assertEquals(expectedSize, actual.size());
-        System.out.println(actualDtos.get(0));
         assertEquals(List.of(bookDto), actualDtos);
     }
 
@@ -267,6 +266,5 @@ public class CategoryControllerTest {
             );
         }
     }
-
 }
 

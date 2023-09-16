@@ -169,7 +169,6 @@ public class BookControllerTest {
                 .andReturn();
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
-        System.out.println(actual);
         boolean isEquals = EqualsBuilder.reflectionEquals(expectedBookDto, actual, "id");
         assertTrue(isEquals);
     }
@@ -192,8 +191,6 @@ public class BookControllerTest {
         expectedCreatedBookDto.setIsbn(createBookRequest.getIsbn());
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
-        System.out.println(expectedCreatedBookDto);
-        System.out.println(actual);
         boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
         assertTrue(isEquals);
     }
@@ -284,5 +281,4 @@ public class BookControllerTest {
             );
         }
     }
-
 }
