@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -34,8 +35,26 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(STATUS_FIELD, HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(e -> getErrorMessage(e)).toList();
-        body.put(ERRORS_FIELD,errors);
-        return new ResponseEntity<>(body,headers,status);
+        body.put(ERRORS_FIELD, errors);
+        return new ResponseEntity<>(body, headers, status);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundException(
+            EntityNotFoundException ex
+    ) {
+        ExceptionResponse errorResponse = new ExceptionResponse(LocalDateTime.now(),
+                HttpStatus.NOT_FOUND, List.of(ex.getMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    protected ResponseEntity<Object> handleRegistrationException(
+            RegistrationException ex
+    ) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST, List.of(ex.getMessage()));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     private String getErrorMessage(ObjectError e) {
@@ -45,5 +64,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             return field + " " + message;
         }
         return e.getDefaultMessage();
+    }
+
+    record ExceptionResponse(LocalDateTime dateTime, HttpStatus httpStatus, List<String> messages) {
+
     }
 }
