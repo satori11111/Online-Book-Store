@@ -97,25 +97,25 @@ public class BookServiceTest {
     @Test
     @DisplayName("Test getById with valid request")
     public void getById_validId_returnsBook() {
-        when(bookRepository.findByIdBookAndItsCategories(anyLong())).thenReturn(Optional.of(book));
+        when(bookRepository.findByIdJoinCategories(anyLong())).thenReturn(Optional.of(book));
         when(bookMapper.toDto(any(Book.class))).thenReturn(bookDto);
 
         assertEquals(bookDto, bookService.getBookById(1L));
-        verify(bookMapper, times(1)).toDto(any(Book.class));
-        verify(bookRepository, times(1)).findByIdBookAndItsCategories(anyLong());
+        verify(bookMapper).toDto(any(Book.class));
+        verify(bookRepository).findByIdJoinCategories(anyLong());
     }
 
     @Test
     @DisplayName("Test getBookById with  non valid request")
-    public void getById_NonValidId_throwsException() {
-        when(bookRepository.findByIdBookAndItsCategories(anyLong())).thenReturn(Optional.empty());
+    public void getById_nonValidId_throwsException() {
+        when(bookRepository.findByIdJoinCategories(anyLong())).thenReturn(Optional.empty());
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> bookService.getBookById(1L));
         String expectedMessage = "Can't find book with id: 1";
         assertEquals(expectedMessage, actual.getMessage());
 
-        verify(bookRepository, times(1)).findByIdBookAndItsCategories(1L);
+        verify(bookRepository).findByIdJoinCategories(1L);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);
     }
@@ -128,9 +128,9 @@ public class BookServiceTest {
         when(bookMapper.toDto(any(Book.class))).thenReturn(bookDto);
 
         assertEquals(bookDto, bookService.save(createBookRequest));
-        verify(bookRepository, times(1)).save(any(Book.class));
-        verify(bookMapper, times(1)).toModel(any(CreateBookRequestDto.class));
-        verify(bookMapper, times(1)).toDto(any(Book.class));
+        verify(bookRepository).save(any(Book.class));
+        verify(bookMapper).toModel(any(CreateBookRequestDto.class));
+        verify(bookMapper).toDto(any(Book.class));
     }
 
     @Test
@@ -140,12 +140,12 @@ public class BookServiceTest {
         List<BookDto> expectedCategoryDtos = List.of(bookDto);
         List<Book> books = List.of(book);
 
-        when(bookRepository.findAllBooksAndTheirCategories(pageable)).thenReturn(books);
+        when(bookRepository.findAllJoinCategories(pageable)).thenReturn(books);
         when(bookMapper.toDto(any(Book.class)))
                 .thenReturn(expectedCategoryDtos.iterator().next());
         List<BookDto> actual = bookService.findAll(pageable);
 
-        verify(bookRepository, times(1)).findAllBooksAndTheirCategories(pageable);
+        verify(bookRepository).findAllJoinCategories(pageable);
         verify(bookMapper, times(books.size())).toDto(any(Book.class));
         assertEquals(expectedCategoryDtos, actual);
     }
@@ -156,34 +156,35 @@ public class BookServiceTest {
         when(bookRepository.save(any(Book.class))).thenReturn(book);
         when(bookMapper.toModel(any(CreateBookRequestDto.class))).thenReturn(book);
         when(bookMapper.toDto(any(Book.class))).thenReturn(bookDto);
-        when(bookRepository.findByIdBookAndItsCategories(anyLong())).thenReturn(Optional.of(book));
+        when(bookRepository.existsById(anyLong())).thenReturn(true);
 
         assertEquals(bookDto, bookService.update(createBookRequest, 1L));
-        verify(bookRepository, times(1)).save(book);
-        verify(bookMapper, times(1)).toModel(any(CreateBookRequestDto.class));
-        verify(bookMapper, times(1)).toDto(any(Book.class));
-        verify(bookRepository, times(1)).findByIdBookAndItsCategories(anyLong());
+        verify(bookRepository).save(book);
+        verify(bookMapper).toModel(any(CreateBookRequestDto.class));
+        verify(bookMapper).toDto(any(Book.class));
+        verify(bookRepository).existsById(anyLong());
     }
 
     @Test
     @DisplayName("Test update with non valid request")
-    public void updateBook_InvalidId_throwsException() {
-        when(bookRepository.findByIdBookAndItsCategories(anyLong())).thenReturn(Optional.empty());
+    public void updateBook_nonValidId_throwsException() {
+        when(bookRepository.existsById(anyLong())).thenReturn(false);
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> bookService.update(createBookRequest, 1L));
         assertEquals("Can't find book with id: 1", actual.getMessage());
+        verify(bookRepository).existsById(anyLong());
     }
 
     @Test
     @DisplayName("Test deleteById with non valid request")
-    public void deleteById_InvalidId_throwsException_notOk() {
-        when(bookRepository.findByIdBookAndItsCategories(anyLong())).thenReturn(Optional.empty());
+    public void deleteById_nonValidId_throwsException_notOk() {
+        when(bookRepository.existsById(anyLong())).thenReturn(false);
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> bookService.deleteById(1L));
         assertEquals("Can't find book with id: 1", actual.getMessage());
-        verify(bookRepository, times(1)).findByIdBookAndItsCategories(anyLong());
+        verify(bookRepository).existsById(anyLong());
     }
 
     @Test
@@ -196,7 +197,7 @@ public class BookServiceTest {
         when(bookMapper.toDto(any(Book.class))).thenReturn(bookDto);
 
         assertEquals(List.of(bookDto), bookService.search(searchParameters));
-        verify(bookRepository, times(1)).findAll(any(Specification.class));
-        verify(specificationBuilder, times(1)).build(any(BookSearchParametersDto.class));
+        verify(bookRepository).findAll(any(Specification.class));
+        verify(specificationBuilder).build(any(BookSearchParametersDto.class));
     }
 }

@@ -33,22 +33,23 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAllBooksAndTheirCategories(pageable).stream()
+        return bookRepository.findAllJoinCategories(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
+        Book book = bookRepository.findByIdJoinCategories(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book with id: " + id));
         return bookMapper.toDto(book);
     }
 
     @Override
     public BookDto update(CreateBookRequestDto requestDto, Long id) {
-        bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find book with id: " + id));
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         Book book = bookMapper.toModel(requestDto);
         book.setId(id);
         Book savedBook = bookRepository.save(book);
@@ -57,8 +58,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        bookRepository.findByIdBookAndItsCategories(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find book with id: " + id));
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         bookRepository.deleteById(id);
     }
 
