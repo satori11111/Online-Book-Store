@@ -18,6 +18,7 @@ databaseChangeLog:
                   name: cart_item_id
                   type: bigint
                   constraints:
+                    primaryKey: true
                     nullable: false
                     foreignKeyName: fk_cart_item_id
                     references: cart_item(id)

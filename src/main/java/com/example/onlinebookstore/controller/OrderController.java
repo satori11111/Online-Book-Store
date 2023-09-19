@@ -48,7 +48,7 @@ public class OrderController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public OrderDto addOrder(CreateOrderRequestDto requestDto) {
+    public OrderDto addOrder(@RequestBody CreateOrderRequestDto requestDto) {
         Long id = userService.getAuthenticatedUser().getId();
         return orderService.addOrder(requestDto, id);
     }
