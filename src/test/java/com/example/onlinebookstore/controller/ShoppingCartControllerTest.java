@@ -1,5 +1,11 @@
 package com.example.onlinebookstore.controller;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_INSERT;
+import static com.example.onlinebookstore.config.SqlFilesPaths.SHOPPING_CART_CART_ITEM_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.SHOPPING_CART_CART_ITEM_INSERT;
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_INSERT;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -31,6 +37,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ShoppingCartControllerTest {
     protected static MockMvc mockMvc;
+    private static CreateCartItemRequestDto cartItemRequestDto;
     private static UpdateCartItemDto updateCartItemDto;
     private static CreateCartItemRequestDto invalidRequestDto;
     private static CreateCartItemRequestDto requestDto;
@@ -51,6 +58,10 @@ public class ShoppingCartControllerTest {
         cartItemDto.setTitle("Book 2");
         cartItemDto.setQuantity(2);
         cartItemDto.setBookId(2L);
+
+        cartItemRequestDto = new CreateCartItemRequestDto();
+        cartItemRequestDto.setBookId(1L);
+        cartItemRequestDto.setQuantity(11);
 
         cartItemDto2 = new CartItemDto();
         cartItemDto2.setId(1L);
@@ -84,14 +95,14 @@ public class ShoppingCartControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql",
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            BOOK_CATEGORY_INSERT,
+            USER_ROLE_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/shopping_cart-cart_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/book-category-delete.sql"
+            SHOPPING_CART_CART_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void deleteById_validId_deleteCartItem() {
@@ -144,14 +155,14 @@ public class ShoppingCartControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql",
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            BOOK_CATEGORY_INSERT,
+            USER_ROLE_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/shopping_cart-cart_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/book-category-delete.sql"
+            SHOPPING_CART_CART_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void update_validId_returnsUpdatedCartItem() {
@@ -171,14 +182,14 @@ public class ShoppingCartControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql",
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            BOOK_CATEGORY_INSERT,
+            USER_ROLE_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/shopping_cart-cart_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/book-category-delete.sql"
+            SHOPPING_CART_CART_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void save_validCartItem_returnsSavedCartItem() {
@@ -196,14 +207,14 @@ public class ShoppingCartControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql",
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            BOOK_CATEGORY_INSERT,
+            USER_ROLE_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/shopping_cart-cart_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/book-category-delete.sql"
+            SHOPPING_CART_CART_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void save_invalidCartItem_ThrowsException() {
@@ -220,14 +231,14 @@ public class ShoppingCartControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql",
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            BOOK_CATEGORY_INSERT,
+            USER_ROLE_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/shopping_cart-cart_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/book-category-delete.sql"
+            SHOPPING_CART_CART_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void getShoppingCart_validId_returnsShoppingCart() {

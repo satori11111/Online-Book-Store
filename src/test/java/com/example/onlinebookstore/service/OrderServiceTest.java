@@ -124,7 +124,7 @@ public class OrderServiceTest {
 
         Assertions.assertEquals(orderItems.size(), actual.size());
         Assertions.assertEquals(Set.of(orderItemDto), actual);
-        verify(orderItemRepository, times(1)).getOrderItemsByOrderId(orderId);
+        verify(orderItemRepository).getOrderItemsByOrderId(orderId);
         verify(orderItemMapper, times(orderItems.size())).orderItemToDto(any(OrderItem.class));
     }
 
@@ -138,8 +138,8 @@ public class OrderServiceTest {
         OrderItemDto result = orderService.getByOrderIdAndOrderItemId(orderId, orderItemId);
 
         Assertions.assertEquals(orderItemDto, result);
-        verify(orderItemRepository, times(1)).getOrderItemByOrderIdAndId(orderId, orderItemId);
-        verify(orderItemMapper, times(1)).orderItemToDto(any(OrderItem.class));
+        verify(orderItemRepository).getOrderItemByOrderIdAndId(orderId, orderItemId);
+        verify(orderItemMapper).orderItemToDto(any(OrderItem.class));
     }
 
     @Test
@@ -155,10 +155,10 @@ public class OrderServiceTest {
         Set<OrderDto> actual = orderService.findAll(pageable, userId);
         Assertions.assertEquals(1, actual.size());
         Assertions.assertEquals(orderDto, actual.iterator().next());
-        verify(orderRepository, times(1)).findAllByUserId(anyLong(), any(Pageable.class));
-        verify(orderMapper, times(1)).toDto(any(Order.class));
-        verify(orderItemRepository, times(1)).getOrderItemsByOrderId(anyLong());
-        verify(orderItemMapper, times(1)).orderItemToDto(any(OrderItem.class));
+        verify(orderRepository).findAllByUserId(anyLong(), any(Pageable.class));
+        verify(orderMapper).toDto(any(Order.class));
+        verify(orderItemRepository).getOrderItemsByOrderId(anyLong());
+        verify(orderItemMapper).orderItemToDto(any(OrderItem.class));
     }
 
     @Test
@@ -175,11 +175,11 @@ public class OrderServiceTest {
         OrderDto actual = orderService.addOrder(requestDto, cartId);
 
         Assertions.assertEquals(orderDto, actual);
-        verify(shoppingCartRepository, times(1)).findById(cartId);
-        verify(cartItemRepository, times(1)).findCartItemsByShoppingCartId(cartId);
-        verify(orderMapper, times(1)).toOrderFromCart(shoppingCart);
-        verify(orderRepository, times(1)).save(any(Order.class));
-        verify(orderMapper, times(1)).toDto(any(Order.class));
+        verify(shoppingCartRepository).findById(cartId);
+        verify(cartItemRepository).findCartItemsByShoppingCartId(cartId);
+        verify(orderMapper).toOrderFromCart(shoppingCart);
+        verify(orderRepository).save(any(Order.class));
+        verify(orderMapper).toDto(any(Order.class));
     }
 
     @Test
@@ -192,9 +192,9 @@ public class OrderServiceTest {
 
         OrderDto actual = orderService.changeStatus(orderId, updateStatusDto);
         Assertions.assertEquals(orderDto, actual);
-        verify(orderRepository, times(1)).findById(orderId);
-        verify(orderRepository, times(1)).save(any(Order.class));
-        verify(orderMapper, times(1)).toDto(any(Order.class));
+        verify(orderRepository).findById(orderId);
+        verify(orderRepository).save(any(Order.class));
+        verify(orderMapper).toDto(any(Order.class));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class OrderServiceTest {
                 () -> orderService.changeStatus(orderId, updateStatusDto));
         String expected = "Can't find order by id: 1";
         Assertions.assertEquals(expected, exception.getMessage());
-        verify(orderRepository, times(1)).findById(anyLong());
+        verify(orderRepository).findById(anyLong());
     }
 }
 

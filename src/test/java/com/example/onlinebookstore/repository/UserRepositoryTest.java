@@ -1,5 +1,7 @@
 package com.example.onlinebookstore.repository;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -9,7 +11,6 @@ import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.User;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -39,12 +40,11 @@ public class UserRepositoryTest {
     }
 
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql"
+            USER_ROLE_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/user-role-delete.sql"
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Test getBooksByCategoriesId with valid request")
     @Test
     public void findByEmail_validEmail_ReturnsUser() {
         User user = userRepository.findByEmail("email@gmail.com")
@@ -53,12 +53,11 @@ public class UserRepositoryTest {
     }
 
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql"
+            USER_ROLE_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/user-role-delete.sql"
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Test getBooksByCategoriesId with valid request")
     @Test
     public void findByEmail_nonValidEmail_ThrowsException() {
         String expectedMessage = "Can't find user with email: non validEmail";

@@ -6,8 +6,8 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.onlinebookstore.dto.shoppingcart.CartItemDto;
@@ -109,32 +109,33 @@ public class ShoppingCartServiceTest {
         UpdateCartItemDto updatedCartItemDto = shoppingCartService.update(cartItemDto, id);
 
         assertEquals(cartItemDto.getQuantity(), updatedCartItemDto.getQuantity());
-        verify(cartItemRepository, times(1)).findById(anyLong());
-        verify(cartItemRepository, times(1)).save(any(CartItem.class));
-        verify(cartItemMapper, times(1)).toUpdateDto(any(CartItem.class));
+        verify(cartItemRepository).findById(anyLong());
+        verify(cartItemRepository).save(any(CartItem.class));
+        verify(cartItemMapper).toUpdateDto(any(CartItem.class));
     }
 
     @Test
     public void deleteById_validId_deleteCartItem() {
         Long id = 1L;
-        when(cartItemRepository.findById(id)).thenReturn(Optional.of(cartItem));
+        when(cartItemRepository.existsById(id)).thenReturn(true);
 
         assertDoesNotThrow(() -> shoppingCartService.delete(id));
-        verify(cartItemRepository, times(1)).findById(id);
-        verify(cartItemRepository, times(1)).deleteById(id);
+        verify(cartItemRepository).existsById(id);
+        verify(cartItemRepository).deleteById(id);
     }
 
     @Test
     public void deleteById_nonValidId_throwsException() {
         Long id = 1L;
-        when(cartItemRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(cartItemRepository.existsById(anyLong())).thenReturn(false);
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class, () -> shoppingCartService.delete(id));
         String expected = "Can't find Cart Item by id: 1";
         assertEquals(expected, exception.getMessage());
-        verify(cartItemRepository, times(1)).findById(anyLong());
-        verify(cartItemRepository, times(0)).deleteById(anyLong());
+        verify(cartItemRepository).existsById(anyLong());
+        verifyNoMoreInteractions(cartItemRepository);
+
     }
 
     @Test
@@ -146,8 +147,8 @@ public class ShoppingCartServiceTest {
                 EntityNotFoundException.class, () -> shoppingCartService.update(cartItemDto,id));
         String expected = "Can't find Cart Item by id: 1";
         assertEquals(expected, exception.getMessage());
-        verify(cartItemRepository, times(1)).findById(anyLong());
-        verify(cartItemRepository, times(0)).save(any(CartItem.class));
+        verify(cartItemRepository).findById(anyLong());
+        verifyNoMoreInteractions(cartItemRepository);
     }
 
     @Test
@@ -159,7 +160,7 @@ public class ShoppingCartServiceTest {
                 EntityNotFoundException.class, () -> shoppingCartService.getShoppingCart(1L));
         String expected = "Can't find shopping cart by id: 1";
         assertEquals(expected, exception.getMessage());
-        verify(shoppingCartRepository, times(1)).findById(anyLong());
+        verify(shoppingCartRepository).findById(anyLong());
     }
 
     @Test
@@ -174,9 +175,9 @@ public class ShoppingCartServiceTest {
         CartItemDto savedCartItemDto = shoppingCartService.save(requestDto, shoppingCart.getId());
 
         assertEquals(cartItemDto, savedCartItemDto);
-        verify(bookRepository, times(1)).getBookById(requestDto.getBookId());
-        verify(shoppingCartRepository, times(1)).findById(shoppingCart.getId());
-        verify(cartItemRepository, times(1)).save(any());
+        verify(bookRepository).getBookById(requestDto.getBookId());
+        verify(shoppingCartRepository).findById(shoppingCart.getId());
+        verify(cartItemRepository).save(any());
     }
 
     @Test
@@ -190,7 +191,7 @@ public class ShoppingCartServiceTest {
         when(cartItemMapper.toDto(any(CartItem.class))).thenReturn(cartItemDto1);
         assertEquals(Collections.singleton(cartItemDto1),
                 shoppingCartService.findByShoppingCart(1L));
-        verify(cartItemRepository, times(1))
+        verify(cartItemRepository)
                 .findCartItemsByShoppingCartId(shoppingCartId);
     }
 
@@ -203,7 +204,7 @@ public class ShoppingCartServiceTest {
         ShoppingCartDto result = shoppingCartService.getShoppingCart(shoppingCartId);
         assertNotNull(result);
         assertEquals(shoppingCartId, result.getUserId());
-        verify(shoppingCartRepository, times(1)).findById(shoppingCartId);
-        verify(shoppingCartMapper, times(1)).toDto(shoppingCart);
+        verify(shoppingCartRepository).findById(shoppingCartId);
+        verify(shoppingCartMapper).toDto(shoppingCart);
     }
 }

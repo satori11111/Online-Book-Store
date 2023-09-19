@@ -1,5 +1,11 @@
 package com.example.onlinebookstore.controller;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.ORDER_ORDER_ITEM_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.ORDER_ORDER_ITEM_INSERT;
+import static com.example.onlinebookstore.config.SqlFilesPaths.SHOPPING_CART_CART_ITEM_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.SHOPPING_CART_CART_ITEM_INSERT;
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.USER_ROLE_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -95,12 +101,12 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void getByOrderId_validId_returnOrderItems() {
@@ -119,12 +125,12 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void getByOrderIdAndOrderItemId_validId_returnOrderItemDto() {
@@ -141,12 +147,12 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void findAll_validUserId_returnsOrderDto() {
@@ -167,14 +173,14 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "email@gmail.com")
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql",
-            "classpath:db/shopping_cart-cart_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT,
+            SHOPPING_CART_CART_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql",
-            "classpath:db/shopping_cart-cart_item-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE,
+            SHOPPING_CART_CART_ITEM_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void addOrder_validRequestDto_returnsOrderDto() {
@@ -195,12 +201,12 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void changeStatus_validId_returnOrderDto() {
@@ -219,12 +225,12 @@ public class OrderControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/user-role-insert.sql",
-            "classpath:db/order-order_item-insert.sql"
+            USER_ROLE_INSERT,
+            ORDER_ORDER_ITEM_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/order-order_item-delete.sql",
-            "classpath:db/user-role-delete.sql"
+            ORDER_ORDER_ITEM_DELETE,
+            USER_ROLE_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void changeStatus_invalidId_throwsException() {

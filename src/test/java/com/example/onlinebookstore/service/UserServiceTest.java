@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -96,13 +95,13 @@ public class UserServiceTest {
         when(roleRepository.getRoleByRoleName(RoleName.ROLE_USER)).thenReturn(role);
 
         assertEquals(userResponseDto, userService.register(userDto));
-        verify(userRepository, times(1)).findByEmail(anyString());
-        verify(passwordEncoder, times(1)).encode(anyString());
-        verify(shoppingCartRepository, times(1)).save(any(ShoppingCart.class));
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(userMapper, times(1)).toRegisterDto(any(User.class));
-        verify(userMapper, times(1)).toModel(any(UserRegistrationRequestDto.class));
-        verify(roleRepository, times(1)).getRoleByRoleName(RoleName.ROLE_USER);
+        verify(userRepository).findByEmail(anyString());
+        verify(passwordEncoder).encode(anyString());
+        verify(shoppingCartRepository).save(any(ShoppingCart.class));
+        verify(userRepository).save(any(User.class));
+        verify(userMapper).toRegisterDto(any(User.class));
+        verify(userMapper).toModel(any(UserRegistrationRequestDto.class));
+        verify(roleRepository).getRoleByRoleName(RoleName.ROLE_USER);
     }
 
     @SneakyThrows
@@ -114,7 +113,7 @@ public class UserServiceTest {
                 RegistrationException.class, () -> userService.register(userDto));
         String expected = "User with email: johndoe@example.com already registered";
         assertEquals(expected, exception.getMessage());
-        verify(userRepository, times(1)).findByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
     }
 
     @Test
@@ -127,7 +126,7 @@ public class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> userService.getAuthenticatedUser());
-        verify(userRepository, times(1)).findByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
     }
 
     @Test
@@ -141,6 +140,6 @@ public class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         assertEquals(user, userService.getAuthenticatedUser());
-        verify(userRepository, times(1)).findByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
     }
 }
