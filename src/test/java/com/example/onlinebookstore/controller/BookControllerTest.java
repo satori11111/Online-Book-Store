@@ -256,6 +256,7 @@ public class BookControllerTest {
     @Sql(scripts = {
             "classpath:db/book-category-delete.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Test getBuId with non valid request")
     @Test
     void getById_nonValidId_throwsException() {
         mockMvc.perform(get("/api/books/4")
