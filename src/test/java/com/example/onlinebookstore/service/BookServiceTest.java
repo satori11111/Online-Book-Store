@@ -178,7 +178,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Test deleteById with non valid request")
-    public void deleteById_nonValidId_throwsException_notOk() {
+    public void deleteById_nonValidId_throwsException() {
         when(bookRepository.existsById(anyLong())).thenReturn(false);
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,

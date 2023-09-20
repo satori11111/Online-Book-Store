@@ -42,15 +42,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CreateCategoryRequestDto requestDto) {
         Category model = categoryMapper.toModel(requestDto);
-        CategoryDto categoryDto = categoryMapper.toDto(categoryRepository.save(model));
-        return categoryDto;
+        return categoryMapper.toDto(categoryRepository.save(model));
     }
 
     @Override
     public CategoryDto updateById(CreateCategoryRequestDto requestDto, Long id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find category by id: " + id);
-        }
+        validateCategoryExists(id);
         Category model = categoryMapper.toModel(requestDto);
         model.setId(id);
         return categoryMapper.toDto(categoryRepository.save(model));
@@ -58,9 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Long id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find category by id: " + id);
-        }
+        validateCategoryExists(id);
         categoryRepository.deleteById(id);
     }
 
@@ -71,5 +66,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
 
+    }
+
+    private void validateCategoryExists(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find category by id: " + id);
+        }
     }
 }

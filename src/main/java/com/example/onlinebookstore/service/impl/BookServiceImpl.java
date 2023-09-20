@@ -10,7 +10,6 @@ import com.example.onlinebookstore.repository.book.BookRepository;
 import com.example.onlinebookstore.repository.specification.SpecificationBuilder;
 import com.example.onlinebookstore.service.BookService;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,7 +24,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto createBookRequestDto) {
-        Set<Long> categoryIds = createBookRequestDto.getCategoryIds();
         Book book = bookMapper.toModel(createBookRequestDto);
         Book savedBook = bookRepository.save(book);
         return bookMapper.toDto(savedBook);
@@ -47,9 +45,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(CreateBookRequestDto requestDto, Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find book with id: " + id);
-        }
+        validateBookExists(id);
         Book book = bookMapper.toModel(requestDto);
         book.setId(id);
         Book savedBook = bookRepository.save(book);
@@ -58,9 +54,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find book with id: " + id);
-        }
+        validateBookExists(id);
         bookRepository.deleteById(id);
     }
 
@@ -70,5 +64,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    private void validateBookExists(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
     }
 }
