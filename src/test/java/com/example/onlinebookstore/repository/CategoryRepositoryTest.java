@@ -1,5 +1,7 @@
 package com.example.onlinebookstore.repository;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.onlinebookstore.model.Book;
@@ -21,14 +23,14 @@ public class CategoryRepositoryTest {
     private CategoryRepository categoryRepository;
 
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getBooksByCategoriesId with valid request")
     @Test
-    public void getBooksByCategoriesId_validId_ReturnsOneBook() {
+    public void getBooksByCategoriesId_validId_returnsOneBook() {
         List<Book> actual = categoryRepository.getBooksByCategoriesId(1L);
         Integer expected = 1;
         assertEquals(expected,actual.size());

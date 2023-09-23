@@ -1,5 +1,7 @@
 package com.example.onlinebookstore.repository;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -52,31 +54,31 @@ public class BookRepositoryTest {
     }
 
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findByIdBookAndItsCategories with valid request")
     @Test
-    public void findByIdBookAndItsCategories_validId_ReturnsOneBook() {
-        Book actual = bookRepository.findByIdBookAndItsCategories(1L).orElseThrow(
+    public void findByIdBookAndItsCategories_validId_returnsOneBook() {
+        Book actual = bookRepository.findByIdJoinCategories(1L).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book with id: 1"));
         Integer expected = 1;
         assertEquals(expectedBook,actual);
     }
 
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findByIdBookAndItsCategories with  non valid request")
     @Test
-    public void findByIdBookAndItsCategories_InvalidId_ThrowsException() {
+    public void findByIdJoinCategories_nonValidId_throwsException() {
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class, () ->
-                bookRepository.findByIdBookAndItsCategories(15L)
+                bookRepository.findByIdJoinCategories(15L)
                         .orElseThrow(() ->
                                 new EntityNotFoundException("Can't find book with id: 15")));
         String expected = "Can't find book with id: 15";
@@ -84,16 +86,16 @@ public class BookRepositoryTest {
     }
 
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAllBookAndTheirCategories with valid request")
     @Test
-    public void findAllBookAndTheirCategories_validRequest_ReturnsListOfBooks() {
+    public void findAllJoinCategories_validRequest_returnsListOfBooks() {
         Pageable pageable = Pageable.ofSize(2);
-        List<Book> actual = bookRepository.findAllBooksAndTheirCategories(pageable);
+        List<Book> actual = bookRepository.findAllJoinCategories(pageable);
         Integer expected = 2;
         assertEquals(expected, actual.size());
         assertEquals(List.of(expectedBook, expectedBook2),actual);

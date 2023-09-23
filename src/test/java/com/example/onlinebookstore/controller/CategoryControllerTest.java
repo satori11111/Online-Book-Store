@@ -1,5 +1,7 @@
 package com.example.onlinebookstore.controller;
 
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_DELETE;
+import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,10 +93,10 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAll with valid request")
     @Test
@@ -140,10 +142,10 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with valid request")
     @Test
@@ -161,10 +163,10 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with valid request")
     @Test
@@ -188,10 +190,10 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test delete with valid request")
     @Test
@@ -208,14 +210,14 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test deleteById with non valid request")
     @Test
-    void deleteById_NonValidId_ThrowsException() {
+    void deleteById_nonValidId_throwsException() {
         mockMvc.perform(delete("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -225,14 +227,14 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with non valid request")
     @Test
-    void updateCategory_NonValidId_throwsException() {
+    void updateCategory_nonValidId_throwsException() {
         mockMvc.perform(put("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -242,14 +244,14 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAll with non valid request")
     @Test
-    void getCategoryById_NonValidId_throwsException_notOk() {
+    void getCategoryById_nonValidId_throwsException_notOk() {
         mockMvc.perform(get("/api/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -259,10 +261,10 @@ public class CategoryControllerTest {
     @SneakyThrows
     @WithMockUser(username = "admin")
     @Sql(scripts = {
-            "classpath:db/book-category-insert.sql"
+            BOOK_CATEGORY_INSERT
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
-            "classpath:db/book-category-delete.sql"
+            BOOK_CATEGORY_DELETE
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with valid request")
     @Test

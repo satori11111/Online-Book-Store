@@ -91,7 +91,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("Test findById with non valid request")
-    public void findById_NonExistingId_throwsException() {
+    public void findById_nonExistingId_throwsException() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
@@ -99,7 +99,7 @@ public class CategoryServiceTest {
         String expectedMessage = "Can't find category by id: 1";
         assertEquals(expectedMessage, actual.getMessage());
 
-        verify(categoryRepository, times(1)).findById(anyLong());
+        verify(categoryRepository).findById(anyLong());
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(categoryMapper);
     }
@@ -111,7 +111,7 @@ public class CategoryServiceTest {
         when(categoryMapper.toDto(any(Category.class))).thenReturn(categoryDto);
 
         assertEquals(categoryDto, categoryService.getCategoryById(1L));
-        verify(categoryRepository, times(1)).findById(1L);
+        verify(categoryRepository).findById(1L);
         verifyNoMoreInteractions(categoryRepository);
     }
 
@@ -128,7 +128,7 @@ public class CategoryServiceTest {
                 .thenReturn(expectedCategoryDtos.iterator().next());
         Set<CategoryDto> actual = categoryService.findAll(pageable);
 
-        verify(categoryRepository, times(1)).findAll(pageable);
+        verify(categoryRepository).findAll(pageable);
         verify(categoryMapper, times(categories.size())).toDto(any(Category.class));
         assertEquals(expectedCategoryDtos, actual);
     }
@@ -141,9 +141,9 @@ public class CategoryServiceTest {
         when(categoryMapper.toDto(any(Category.class))).thenReturn(categoryDto);
 
         assertEquals(categoryDto, categoryService.create(requestDto));
-        verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1)).toModel(any(CreateCategoryRequestDto.class));
-        verify(categoryMapper, times(1)).toDto(any(Category.class));
+        verify(categoryRepository).save(category);
+        verify(categoryMapper).toModel(any(CreateCategoryRequestDto.class));
+        verify(categoryMapper).toDto(any(Category.class));
     }
 
     @Test
@@ -152,34 +152,35 @@ public class CategoryServiceTest {
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
         when(categoryMapper.toModel(any(CreateCategoryRequestDto.class))).thenReturn(category);
         when(categoryMapper.toDto(any(Category.class))).thenReturn(categoryDto);
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+        when(categoryRepository.existsById(anyLong())).thenReturn(true);
 
         assertEquals(categoryDto, categoryService.updateById(requestDto, 1L));
-        verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1)).toModel(any(CreateCategoryRequestDto.class));
-        verify(categoryMapper, times(1)).toDto(any(Category.class));
-        verify(categoryRepository, times(1)).findById(anyLong());
+        verify(categoryRepository).save(category);
+        verify(categoryMapper).toModel(any(CreateCategoryRequestDto.class));
+        verify(categoryMapper).toDto(any(Category.class));
+        verify(categoryRepository).existsById(anyLong());
 
     }
 
     @Test
     @DisplayName("Test update with non valid request")
-    public void updateCategory_InvalidId_throwsException() {
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+    public void updateCategory_nonValidId_throwsException() {
+        when(categoryRepository.existsById(anyLong())).thenReturn(false);
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.updateById(requestDto,1L));
         assertEquals("Can't find category by id: 1", actual.getMessage());
+        verify(categoryRepository).existsById(anyLong());
     }
 
     @Test
     @DisplayName("Test delete with valid request")
-    public void deleteCategoryById_InvalidId_throwsException() {
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+    public void deleteCategoryById_nonValidId_throwsException() {
+        when(categoryRepository.existsById(anyLong())).thenReturn(false);
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.deleteById(1L));
         assertEquals("Can't find category by id: 1", actual.getMessage());
-        verify(categoryRepository, times(1)).findById(anyLong());
+        verify(categoryRepository).existsById(anyLong());
     }
 
     @Test
@@ -189,6 +190,6 @@ public class CategoryServiceTest {
         when(bookMapper.toDtoWithoutCategories(any(Book.class)))
                 .thenReturn(bookDtoWithoutCategoryIds);
         assertEquals(List.of(bookDtoWithoutCategoryIds), categoryService.getBooksByCategoryId(1L));
-        verify(categoryRepository, times(1)).getBooksByCategoriesId(anyLong());
+        verify(categoryRepository).getBooksByCategoriesId(anyLong());
     }
 }

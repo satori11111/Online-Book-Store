@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book,Long>, JpaSpecificationExecutor<Book> {
     @Query("FROM Book b JOIN FETCH b.categories WHERE b.id = :id")
-    Optional<Book> findByIdBookAndItsCategories(Long id);
+    Optional<Book> findByIdJoinCategories(Long id);
 
     @Query("FROM Book b JOIN FETCH b.categories")
-    List<Book> findAllBooksAndTheirCategories(Pageable pageable);
+    List<Book> findAllJoinCategories(Pageable pageable);
 
     Book getBookById(Long id);
 }
