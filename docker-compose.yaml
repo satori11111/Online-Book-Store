@@ -16,6 +16,7 @@ services:
       - $MYSQL_PORT
 
   online-book-store:
+    restart: on-failure
     build: .
     container_name: online-book-store
     env_file: ./.env
