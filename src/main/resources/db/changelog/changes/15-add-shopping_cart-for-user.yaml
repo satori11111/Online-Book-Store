@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-shopping_cart-for-user-to-db
+      author: roma
+      changes:
+        - insert:
+            tableName: shopping_cart
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
