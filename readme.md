@@ -1,6 +1,6 @@
 # Online book store
 
-Api for book store
+Api created for providing access to data, functionality, and services that enhance the customer experience, and drive business growth
 
 ## Table of Contents
 - [Introduction](#introduction)
