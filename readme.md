@@ -86,7 +86,7 @@ docker compose up
 ### Usage
 
 **If you want test Api without installation go to link below, there you can interact with all endpoints thanks to OpenApi:** 
-https://ec2-52-205-209-190.compute-1.amazonaws.com/swagger-ui/index.html#/
+http://ec2-52-205-209-190.compute-1.amazonaws.com/swagger-ui/index.html#/
 
 **Create your own user:**
 Use endpoint auth/register to register user and stick to these rules:
