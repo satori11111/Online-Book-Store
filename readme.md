@@ -4,13 +4,13 @@ Api created for providing access to data, functionality, and services that enhan
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [Challenges](#challenges-and-solutions-in-building-our-online-book-store)
 - [Summary](#summary)
+
 ## Introduction
 
 
@@ -42,23 +42,18 @@ Our application leverages several cutting-edge technologies, including:
 
 ### Api Functionalities
 In our Online Book Store project, we've diligently followed REST (Representational State Transfer) principles in designing our controllers. Controllers are essential components responsible for handling HTTP requests and responses.
-- **BookController**: Handles book-related operations, including creation, retrieval, update, and deletion of books.
-- **CategoryController**
-- **AuthenticationController**
-- **ShoppingCartController**
-- **OrderController** <br>
+- **BookController**: receive and handle requests for adding, updating, getting and searching books.
+- **CategoryController** receive and handle requests for adding, updating, getting categories and getting all books by category.
+- **AuthenticationController** receive and handle requests for register and login user(with email and password or jwt token).
+- **ShoppingCartController** receive and handle requests for adding, deleting and updating books to shopping cart, also getting user's shopping cart.
+- **OrderController** receive and handle requests for creating and getting order, also updating status of order<br>
 In detail order about functions of controllers you can read at [Features](#features)
-## Getting Started
-
-To get started with our Online Book Store, you can follow the installation instruction provided in the [README](#) file in the project repository. This guide will walk you through setting up the application, configuring the necessary settings, and launching it in your preferred environment.
-Thank you for choosing our Online Book Store project. We hope you enjoy the world of books at your fingertips, and we're committed to providing you with a safe, efficient, and delightful shopping experience. If you have any questions or feedback, please don't hesitate to reach out. Happy reading!
 
 ## Prerequisites
 
 List the prerequisites required to run your application. Include things like:
 
 - Java 17 (https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-- Maven (https://maven.apache.org/download.cgi)
 - Docker (https://www.docker.com/)
 
 ### Installation
