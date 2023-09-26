@@ -58,7 +58,7 @@ List the prerequisites required to run your application. Include things like:
 
 ### Installation
 
-1. **Firstly you need to clone repository** <br>
+1. Firstly you need to clone repository <br>
 You can either open IDEA --> File --> New Project from Version Control and insert link: https://github.com/satori11111/Online-Book-Store.git. <br>
  Or you can clone from console with command:
  ```bash 
